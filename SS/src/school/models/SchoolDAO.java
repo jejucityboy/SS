@@ -36,7 +36,7 @@ public class SchoolDAO {
 		StringBuffer sql = new StringBuffer();
 
 		sql.append(" select sh_name, sh_location1, sh_location2, sh_state, sh_address2");
-		sql.append(" from school");
+		sql.append(" from sh_test");
 		sql.append(" order by sh_name asc");
 
 		try (Connection conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:xe", "schoolsignal",
