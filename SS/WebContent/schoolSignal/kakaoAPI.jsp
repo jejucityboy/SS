@@ -213,59 +213,73 @@
 		</div>
 	</div>
 
-	<script type="text/javascript"
-		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=08ac5f210c21cf38bc0484639366ce74&libraries=services"></script>
-	<script>
-		// 마커를 담을 배열입니다
-		var markers = [];
+   <script type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=08ac5f210c21cf38bc0484639366ce74&libraries=services,clusterer"></script>
+   <script>
 
-		var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-		mapOption = {
-			center : new kakao.maps.LatLng(37.469221, 126.573234), // 지도의 중심좌표
-			level : 7
-		// 지도의 확대 레벨
-		};
+      var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
+      mapOption = {
+         center : new kakao.maps.LatLng(37.469221, 126.573234), // 지도의 중심좌표
+         level : 9
+      // 지도의 확대 레벨
+      };
 
 
 
    var map = new kakao.maps.Map(mapContainer, mapOption); // 지도를 생성합니다
-
-   
-   
-   
+   var clusterer = new kakao.maps.MarkerClusterer({
+       map: map, // 마커들을 클러스터로 관리하고 표시할 지도 객체 
+       averageCenter: true, // 클러스터에 포함된 마커들의 평균 위치를 클러스터 마커 위치로 설정 
+       minLevel: 7 // 클러스터 할 최소 지도 레벨 
+   });
    //마커를 표시할 위치와 내용을 가지고 있는 객체 배열입니다 
    var positions = [
 
       <c:forEach items="${list}" var="dto" varStatus="st">
       <c:if test="${st.index != 0}">,</c:if>
-      {
+         {
           content: '${dto.sh_name}', 
           latlng: new kakao.maps.LatLng(${dto.sh_location1}, ${dto.sh_location2 })
-      }
+         }
       </c:forEach>   ];
-
+   var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+   
+   var markers = [];
+   
    for (var i = 0; i < positions.length; i ++) {
    // 마커를 생성합니다
+            // 마커 이미지의 이미지 크기 입니다
+         var imageSize = new kakao.maps.Size(24, 35);
+
+         // 마커 이미지를 생성합니다    
+         var markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize);
+
+
    var marker = new kakao.maps.Marker({
        map: map, // 마커를 표시할 지도
-       position: positions[i].latlng // 마커의 위치
+       position: positions[i].latlng, // 마커의 위치
+       title : positions[i].title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      content : positions[i].content,
+      image : markerImage
+   // 마커 이미지 
    });
-
-   
-   
 
    // 마커에 표시할 인포윈도우를 생성합니다 
    var infowindow = new kakao.maps.InfoWindow({
        content: positions[i].content // 인포윈도우에 표시할 내용
    });
 
+   markers.push(marker);
    // 마커에 mouseover 이벤트와 mouseout 이벤트를 등록합니다
    // 이벤트 리스너로는 클로저를 만들어 등록합니다 
    // for문에서 클로저를 만들어 주지 않으면 마지막 마커에만 이벤트가 등록됩니다
    kakao.maps.event.addListener(marker, 'mouseover', makeOverListener(map, marker, infowindow));
    kakao.maps.event.addListener(marker, 'mouseout', makeOutListener(infowindow));
-   }
-
+   
+}
+   clusterer.addMarkers(markers);
+   
+   
    //인포윈도우를 표시하는 클로저를 만드는 함수입니다 
    function makeOverListener(map, marker, infowindow) {
    return function() {

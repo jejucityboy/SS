@@ -1,4 +1,4 @@
-package school.controllers;
+package online;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,22 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import school.models.SchoolDAO;
-import school.models.SchoolDTO;
-
-@WebServlet("/schoolSignal")
-public class SchoolController extends HttpServlet {
+@WebServlet("/onlineClass")
+public class Onlinectr extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		SchoolDAO deptDAO = SchoolDAO.getInstance();
-		List<SchoolDTO> list = deptDAO.getDeptList();
+		OnlineDAO onlineDAO = OnlineDAO.getInstance();
+		List<OnlineDTO> list = onlineDAO.getDeptList();
 
 		request.setAttribute("list", list);
-		request.setAttribute("title", "학교위치");
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/schoolSignal/kakaoAPI.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/views/onlineList.jsp");
 		dispatcher.forward(request, response);
 	}
+
 }

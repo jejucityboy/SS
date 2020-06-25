@@ -1,4 +1,4 @@
-package school.controllers;
+package crawl;
 
 import java.io.IOException;
 import java.util.List;
@@ -10,22 +10,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import school.models.SchoolDAO;
-import school.models.SchoolDTO;
-
-@WebServlet("/schoolSignal")
-public class SchoolController extends HttpServlet {
+@WebServlet("/news_crawl")
+public class Crawlctr extends HttpServlet {
 
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		SchoolDAO deptDAO = SchoolDAO.getInstance();
-		List<SchoolDTO> list = deptDAO.getDeptList();
+		CrawlDAO crawlDAO = CrawlDAO.getInstance();
+		List<CrawlDTO> list = crawlDAO.getDeptList();
 
 		request.setAttribute("list", list);
-		request.setAttribute("title", "학교위치");
 
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/schoolSignal/kakaoAPI.jsp");
+		RequestDispatcher dispatcher = request.getRequestDispatcher("/views/from.jsp");
 		dispatcher.forward(request, response);
 	}
+
 }
