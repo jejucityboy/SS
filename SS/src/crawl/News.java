@@ -1,5 +1,6 @@
 package crawl;
 
+
 import java.io.IOException;
 import java.util.Iterator;
 
@@ -7,32 +8,55 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
 public class News {
-   public static void main(String[] args) {
-      
-      String url = "https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page=1&q=%EC%BD%94%EB%A1%9C%EB%82%98%20%EC%9D%B8%EC%B2%9C%20%ED%95%99%EA%B5%90"; 
-      Document doc = null;        //Document에는 페이지의 전체 소스가 저장된다
+	public static String title;
+	public static String link;
+	public static String text;
+	public static String img;
+	public static String date;
 
-      try {
-         doc = Jsoup.connect(url).get();
-      } catch (IOException e) {
-         e.printStackTrace();
-      }
-      
-      Elements element = doc.select("div.coll_cont");
+	public static void main(String[] args) {
 
+		String url = "https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page=1&q=%EC%BD%94%EB%A1%9C%EB%82%98%20%EC%9D%B8%EC%B2%9C%20%ED%95%99%EA%B5%90";
+		Document doc = null; // Document에는 페이지의 전체 소스가 저장된다
 
-      Iterator<Element> ie1 = element.select("div.wrap_tit").iterator(); //제목
-      Iterator<Element> ie2 = element.select("a.f_link_b").iterator(); //링크
-      Iterator<Element> ie3 = element.select("p.f_eb").iterator(); //내용
-      Iterator<Element> ie4 = element.select("img.thumb_img").iterator(); //이미지
-      Iterator<Element> ie5 = element.select("span.f_nb.date").iterator(); //작성날짜
-      
-      while (ie1.hasNext()) {
-         System.out.println(ie1.next().text()+"\n"+ie2.next().attr("href")
-               +"\n"+ie3.next().text()+"\n"+ie4.next().attr("src")+"\n"+ie5.next().text());      
-         System.out.println();
-      }
-      System.out.println("============================================================");
-   }
+		try {
+			doc = Jsoup.connect(url).get();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		CrawlDTO CrawlDTO = new CrawlDTO();
+
+		Elements element = doc.select("div.coll_cont");
+
+		Iterator<Element> ie1 = element.select("div.wrap_tit").iterator(); // 제목
+		Iterator<Element> ie2 = element.select("a.f_link_b").iterator(); // 링크
+		Iterator<Element> ie3 = element.select("p.f_eb").iterator(); // 내용
+		Iterator<Element> ie4 = element.select("img.thumb_img").iterator(); // 이미지
+		Iterator<Element> ie5 = element.select("span.f_nb.date").iterator(); // 작성날짜
+
+		while (ie1.hasNext()) {
+			title = ie1.next().text();
+			link = ie2.next().attr("href");
+			text = ie3.next().text();
+			img = ie4.next().attr("src");
+			date = ie5.next().text();
+
+			System.out.println(title + "\n" + link + "\n" + text + "\n" + img + "\n" + date + "\n");
+			System.out.println();
+			
+			CrawlDTO.setArti_tit(title);
+			CrawlDTO.setArti_link(link);
+			CrawlDTO.setArti_text(text);
+			CrawlDTO.setArti_img(img);
+			CrawlDTO.setArti_date(date);
+
+			CrawlDAO crawlDAO = CrawlDAO.getInstance();
+			boolean result = crawlDAO.insertNews(CrawlDTO);
+
+		}
+		System.out.println("============================================================");
+	}
 }
