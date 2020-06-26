@@ -1,8 +1,9 @@
 package crawl;
 
-
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,7 +19,7 @@ public class News {
 
 	public static void main(String[] args) {
 
-		String url = "https://search.daum.net/search?w=news&nil_search=btn&DA=NTB&enc=utf8&cluster=y&cluster_page=1&q=%EC%BD%94%EB%A1%9C%EB%82%98%20%EC%9D%B8%EC%B2%9C%20%ED%95%99%EA%B5%90";
+		String url = "https://search.daum.net/search?w=news&sort=recency&q=%EC%BD%94%EB%A1%9C%EB%82%98%20%ED%95%99%EA%B5%90%20%EB%93%B1%EA%B5%90%EC%A4%91%EB%8B%A8&cluster=n&DA=STC&dc=STC&pg=1&r=1&p=1&rc=1&at=more&sd=&ed=&period=";
 		Document doc = null; // Document에는 페이지의 전체 소스가 저장된다
 
 		try {
@@ -27,7 +28,7 @@ public class News {
 			e.printStackTrace();
 		}
 
-		CrawlDTO CrawlDTO = new CrawlDTO();
+		
 
 		Elements element = doc.select("div.coll_cont");
 
@@ -36,8 +37,13 @@ public class News {
 		Iterator<Element> ie3 = element.select("p.f_eb").iterator(); // 내용
 		Iterator<Element> ie4 = element.select("img.thumb_img").iterator(); // 이미지
 		Iterator<Element> ie5 = element.select("span.f_nb.date").iterator(); // 작성날짜
+		
+		List<CrawlDTO> crawl_list = new ArrayList<>();
 
 		while (ie1.hasNext()) {
+			
+			CrawlDTO crawlDTO = new CrawlDTO();
+			
 			title = ie1.next().text();
 			link = ie2.next().attr("href");
 			text = ie3.next().text();
@@ -46,17 +52,23 @@ public class News {
 
 			System.out.println(title + "\n" + link + "\n" + text + "\n" + img + "\n" + date + "\n");
 			System.out.println();
-			
-			CrawlDTO.setArti_tit(title);
-			CrawlDTO.setArti_link(link);
-			CrawlDTO.setArti_text(text);
-			CrawlDTO.setArti_img(img);
-			CrawlDTO.setArti_date(date);
 
-			CrawlDAO crawlDAO = CrawlDAO.getInstance();
-			boolean result = crawlDAO.insertNews(CrawlDTO);
+			crawlDTO.setArti_tit(title);
+			crawlDTO.setArti_link(link);
+			crawlDTO.setArti_text(text);
+			crawlDTO.setArti_img(img);
+			crawlDTO.setArti_date(date);
+			
+			crawl_list.add(crawlDTO);
+
 
 		}
+		
+		CrawlDAO crawlDAO = CrawlDAO.getInstance();
+		crawlDAO.deleteAll();
+		
+		crawlDAO.insertCrawl(crawl_list);
+		
 		System.out.println("============================================================");
 	}
 }

@@ -36,7 +36,7 @@ public class CrawlDAO {
 		List<CrawlDTO> list = new ArrayList<>();
 
 		StringBuffer sql = new StringBuffer();
-		sql.append(" select arti_tit, arti_link, arti_text, arti_img, arti_date)");
+		sql.append(" select arti_tit, arti_link, arti_text, arti_img, arti_date");
 		sql.append(" from	school_crawl");
 
 		try (Connection conn = getConnenction(); PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
@@ -53,10 +53,7 @@ public class CrawlDAO {
 					list.add(crawlDTO);
 				}
 
-			} catch (Exception e) {
-				e.printStackTrace();
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -66,31 +63,57 @@ public class CrawlDAO {
 
 	}
 
-	public boolean insertNews(CrawlDTO crawlDTO) {
 
+
+	public boolean deleteAll() {
+		// TODO Auto-generated method stub
 		boolean result = false;
-
+		
 		StringBuffer sql = new StringBuffer();
-		sql.append(" insert into school_crawl(arti_tit, arti_link, arti_text, arti_img, arti_date)");
-		sql.append(" values(?, ?, ?, ?, ?)");
+		sql.append(" delete school_crawl"); 
 
 		try (Connection conn = getConnenction(); PreparedStatement pstmt = conn.prepareStatement(sql.toString())) {
 
-			pstmt.setString(1, crawlDTO.getArti_tit());
-			pstmt.setString(2, crawlDTO.getArti_link());
-			pstmt.setString(3, crawlDTO.getArti_text());
-			pstmt.setString(4, crawlDTO.getArti_img());
-			pstmt.setString(5, crawlDTO.getArti_date());
-
-			if (pstmt.executeUpdate() > 0) {
-				result = true;
+			if (pstmt.executeUpdate() > 0) { // 쿼리 실행
+				result = true; // sql문이 정상 실행됐을 때 true
 			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
+
+	public boolean insertCrawl(List<CrawlDTO> crawl_list) {
+		// TODO Auto-generated method stub
+		boolean result = false;
+
+		
+		
+		StringBuffer sql2 = new StringBuffer();
+		sql2.append(" insert into school_crawl(arti_tit, arti_link, arti_text, arti_img, arti_date)");
+		sql2.append(" values(?, ?, ?, ?, ?)");
+
+		try (Connection conn2 = getConnenction(); PreparedStatement pstmt = conn2.prepareStatement(sql2.toString())) {
+
+			for (CrawlDTO crawlDTO : crawl_list) {
+				pstmt.setString(1, crawlDTO.getArti_tit());
+				pstmt.setString(2, crawlDTO.getArti_link());
+				pstmt.setString(3, crawlDTO.getArti_text());
+				pstmt.setString(4, crawlDTO.getArti_img());
+				pstmt.setString(5, crawlDTO.getArti_date());
+				pstmt.executeUpdate();
+				
+				
+			}
+			result = true;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return result;
-
+		
 	}
 
 }

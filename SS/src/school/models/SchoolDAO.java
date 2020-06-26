@@ -35,7 +35,7 @@ public class SchoolDAO {
 		List<SchoolDTO> list = new ArrayList<>();
 		StringBuffer sql = new StringBuffer();
 
-		sql.append(" select sh_name, sh_location1, sh_location2, sh_state, sh_address2");
+		sql.append(" select sh_name, sh_location1, sh_location2, sh_state, sh_address1, sh_address2");
 		sql.append(" from sh_test");
 		sql.append(" order by sh_name asc");
 
@@ -50,6 +50,7 @@ public class SchoolDAO {
 				deptDTO.setSh_location1(rs.getDouble("sh_location1"));
 				deptDTO.setSh_location2(rs.getDouble("sh_location2"));
 				deptDTO.setSh_state(rs.getString("sh_state"));
+				deptDTO.setsh_address1(rs.getString("sh_address1"));
 				deptDTO.setSh_address2(rs.getString("sh_address2"));
 				list.add(deptDTO);
 			}

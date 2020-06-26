@@ -17,7 +17,7 @@ public class Crawlctr extends HttpServlet {
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		CrawlDAO crawlDAO = CrawlDAO.getInstance();
-		List<CrawlDTO> list = crawlDAO.getDeptList();
+		List<CrawlDTO> list = crawlDAO.getCrawlList();
 
 		request.setAttribute("list", list);
 

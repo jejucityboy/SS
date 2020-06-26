@@ -2,13 +2,18 @@
 <%@page import="crawl.CrawlDAO"%>
 <%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.PreparedStatement"%>
+<%@page import="java.sql.Connection"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	CrawlDAO crawlDAO = CrawlDAO.getInstance();
-	List<CrawlDTO> list = crawlDAO.getCrawlList();
+List<CrawlDTO> list = crawlDAO.getCrawlList();
 %>
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
@@ -20,36 +25,52 @@
 body {
 	font-family: 'Nanum Myeongjo', serif;
 }
+
+a:link {
+	color: black;
+	text-decoration: none;
+}
+
+a:visited {
+	color: #881ca3;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #349eeb;
+	text-decoration: underline;
+}
 </style>
 </head>
 <body>
-	<table border="1" >
-		<caption>기사 리스트</caption>
-		<tr>
-			<th>제목</th>
-			<th>링크</th>
-			<th>내용</th>
-			<th>이미지</th>
-			<th>작성자</th>
-		</tr>
-		<tr>
-		<%
-			for (CrawlDTO crawlDTO:list ) {
-		%>
-			<td><%=crawlDTO.getArti_tit()%></td>
+	<div
+		style="overflow: scroll; width: 369px; height: 600px; border: 1px solid; padding: 15px;">
 		
-			<td><%=crawlDTO.getArti_link()%></td>
+		<table border=1 align=center cellspacing=0 cellpadding=0 width=360 height=80 >
+			<%
+				for (CrawlDTO crawlDTO : list) {
+			%>
 		
-			<td><%=crawlDTO.getArti_text()%></td>
+			<tr>
+			<td>
+			<img alt="news_img" src="<%=crawlDTO.getArti_img()%>" style="width: 80px; height: 80px;" />
+			
+			</td>
+			<td>
+			<a href="<%=crawlDTO.getArti_link()%>">
+			<span
+				style="font-weight: bold; font-size: 14px"><%=crawlDTO.getArti_tit()%>
+			</span>
+			<span
+				style="font-weight: bold; font-size: 14px"><%=crawlDTO.getArti_date()%>
+			</span>
+			</a>
+			
+			</td>
+			</tr>
+		</div>
+		<% } %>
+		</table>
 		
-			<td><%=crawlDTO.getArti_img()%></td>
-		
-			<td><%=crawlDTO.getArti_date()%></td>
-		</tr>
-		<%
-			}
-		%>
-	</table>
-	<br />
 </body>
 </html>

@@ -238,8 +238,9 @@
       <c:forEach items="${list}" var="dto" varStatus="st">
       <c:if test="${st.index != 0}">,</c:if>
          {
-          content: '${dto.sh_name}', 
-          latlng: new kakao.maps.LatLng(${dto.sh_location1}, ${dto.sh_location2 })
+        	 content: '<div style="font-size:25px">${dto.sh_name}</div><br><div style="color:blue"; "font-weight:bold";>${dto.sh_state}</div><br><div>${dto.sh_address1}</div><div>${dto.sh_address2}</div><br>&nbsp',
+             latlng: new kakao.maps.LatLng(${dto.sh_location1}, ${dto.sh_location2})
+
          }
       </c:forEach>   ];
    var imageSrc = "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
