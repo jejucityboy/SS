@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import crawl.News;
 import school.models.SchoolDAO;
 import school.models.SchoolDTO;
 
@@ -19,8 +20,13 @@ public class SchoolController extends HttpServlet {
 	@Override
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
+		
+		News news = News.getInstance();
+		news.news_crawl();
+		
 		SchoolDAO deptDAO = SchoolDAO.getInstance();
 		List<SchoolDTO> list = deptDAO.getDeptList();
+				
 
 		request.setAttribute("list", list);
 		request.setAttribute("title", "학교위치");

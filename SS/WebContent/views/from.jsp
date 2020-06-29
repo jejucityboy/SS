@@ -11,7 +11,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%
 	CrawlDAO crawlDAO = CrawlDAO.getInstance();
-List<CrawlDTO> list = crawlDAO.getCrawlList();
+	List<CrawlDTO> list = crawlDAO.getCrawlList();
 %>
 <!DOCTYPE html>
 <html>
@@ -43,34 +43,25 @@ a:hover {
 </style>
 </head>
 <body>
-	<div
-		style="overflow: scroll; width: 369px; height: 600px; border: 1px solid; padding: 15px;">
-		
-		<table border=1 align=center cellspacing=0 cellpadding=0 width=360 height=80 >
+	<div style="overflow: scroll; width: 369px; height: 600px; padding: 15px;">
+
+		<table
+			style="align: center; cellspacing: 0; cellpadding: 0; width: 360px; height: 80px; ">
 			<%
 				for (CrawlDTO crawlDTO : list) {
 			%>
-		
+
 			<tr>
-			<td>
-			<img alt="news_img" src="<%=crawlDTO.getArti_img()%>" style="width: 80px; height: 80px;" />
-			
-			</td>
-			<td>
-			<a href="<%=crawlDTO.getArti_link()%>">
-			<span
-				style="font-weight: bold; font-size: 14px"><%=crawlDTO.getArti_tit()%>
-			</span>
-			<span
-				style="font-weight: bold; font-size: 14px"><%=crawlDTO.getArti_date()%>
-			</span>
-			</a>
-			
-			</td>
+				<td style="padding: 10px;"><img alt="news_img" src="<%=crawlDTO.getArti_img()%>"
+					style="width: 80px; height: 80px;" /></td>
+				<td><a href="<%=crawlDTO.getArti_link()%>"> <span
+						style="font-weight: bold; font-size: 14px"><%=crawlDTO.getArti_tit()%>
+					</span></a><br/><br/> <span style="font-size: 11px"><%=crawlDTO.getArti_date()%>
+				</span></td>
 			</tr>
-		</div>
-		<% } %>
+			
+			<% } %>
 		</table>
-		
+	</div>
 </body>
 </html>

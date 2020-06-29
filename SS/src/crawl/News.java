@@ -16,10 +16,19 @@ public class News {
 	public static String text;
 	public static String img;
 	public static String date;
+	
+	private static News news = null;
 
-	public static void main(String[] args) {
+	public static News getInstance() {
+		if (news == null) {
+			news = new News();
+		}
+		return news;
+	}
 
-		String url = "https://search.daum.net/search?w=news&sort=recency&q=%EC%BD%94%EB%A1%9C%EB%82%98%20%ED%95%99%EA%B5%90%20%EB%93%B1%EA%B5%90%EC%A4%91%EB%8B%A8&cluster=n&DA=STC&dc=STC&pg=1&r=1&p=1&rc=1&at=more&sd=&ed=&period=";
+	public static void news_crawl() {
+
+		String url = "https://search.daum.net/search?nil_suggest=btn&w=news&DA=SBC&cluster=y&q=%EC%BD%94%EB%A1%9C%EB%82%98+%EB%93%B1%EA%B5%90%EC%A4%91%EB%8B%A8";
 		Document doc = null; // Document에는 페이지의 전체 소스가 저장된다
 
 		try {
